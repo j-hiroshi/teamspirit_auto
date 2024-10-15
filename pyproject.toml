@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "src"
+version = "0.1.0"
+description = ""
+authors = ["j-hiroshi <risuzaru.f@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10, <3.14"
+requests = "^2.32.3"
+selenium = "^4.25.0"
+chromedriver = "^2.24.1"
+beautifulsoup4 = "^4.12.3"
+python-dateutil = "^2.9.0.post0"
+jpholiday = "^0.1.10"
+webdriver-manager = "^4.0.2"
+pyinstaller = "^6.10.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
