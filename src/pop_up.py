@@ -6,8 +6,10 @@ import datetime
 
 class PopUp:
     def __init__(self):
-        self.start_time = "0900"  # 始業時間
-        self.end_time = "1800"  # 終業時間
+        self._start_time = "0900"  # 始業時間
+        self._end_time = "1800"  # 終業時間
+        self._start_date = "1"  # 開始日
+        self._end_date = "31"  # 終了日
 
     # 画面を中央に配置する
     def centering_window(self, root: tk.Tk):
@@ -51,34 +53,64 @@ class PopUp:
 
         validate_time_comd = root.register(validate_time)
 
-        # ユーザー名
-        user_entry = self.create_input_frame(root, "ユーザ名:", 10, 30, False)
+        # ユーザー名の枠作成
+        user_frame = tk.Frame(root)
+        user_frame.pack(pady=(10, 0))
+        tk.Label(user_frame, text="ユーザ名:").pack(anchor=tk.W)
+        user_entry = ttk.Entry(user_frame, width=30, style="Normal.TEntry")
+        user_entry.pack(padx=30)
 
-        # パスワード
-        password_entry = self.create_input_frame(root, "パスワード:", 5, 30, True)
-
-        # 始業時間
-        start_time_entry = self.create_input_frame(
-            root, "始業時間(デフォルト 0900)", 30, 5, False
+        # パスワードの枠作成
+        password_frame = tk.Frame(root)
+        password_frame.pack(pady=(5, 0))
+        tk.Label(password_frame, text="パスワード:").pack(anchor=tk.W)
+        password_entry = ttk.Entry(
+            password_frame,
+            show="*",
+            width=30,
+            style="Normal.TEntry",
         )
+        password_entry.pack(padx=30)
+
+        # 始業時間、終業時間の枠作成
+        time_frame = tk.Frame(root)
+        time_frame.pack(pady=(30, 0))
+        tk.Label(time_frame, text="始業時間：終業時間").pack()
+        start_time_entry = ttk.Entry(time_frame, width=5, style="Normal.TEntry")
+        start_time_entry.pack(padx=5, side=tk.LEFT)
+        end_time_entry = ttk.Entry(time_frame, width=5, style="Normal.TEntry")
+        end_time_entry.pack(padx=5, side=tk.LEFT)
+
+        # 入力制限設定
         start_time_entry.config(
             validatecommand=(validate_time_comd, "%P", "%S"),
             validate="key",
-        )
-
-        # 終業時間
-        end_time_entry = self.create_input_frame(
-            root, "終業時間(デフォルト 1800)", 5, 5, False
         )
         end_time_entry.config(
             validatecommand=(validate_time_comd, "%P", "%S"),
             validate="key",
         )
 
-        # 初期値設定
-        start_time_entry.insert(0, self.start_time)
-        end_time_entry.insert(0, self.end_time)
+        # 開始日、終了日の枠作成
+        date_frame = tk.Frame(root)
+        date_frame.pack(pady=(10, 0))
+        tk.Label(date_frame, text="開始日：終了日").pack()
+        start_date_comb = ttk.Combobox(
+            date_frame, values=list(range(1, 32)), width=4, state="readonly"
+        )
+        start_date_comb.pack(padx=5, side=tk.LEFT)
+        end_date_comb = ttk.Combobox(
+            date_frame, values=list(range(1, 32)), width=4, state="readonly"
+        )
+        end_date_comb.pack(padx=5, side=tk.LEFT)
 
+        # 初期値設定
+        start_time_entry.insert(0, self._start_time)
+        end_time_entry.insert(0, self._end_time)
+        start_date_comb.set(self._start_date)
+        end_date_comb.set(self._end_date)
+
+        # 開始時のバリデーション
         def validate_confirm(entry: ttk.Entry, is_time: bool) -> bool:
             if is_time:
                 # 時間のバリデーションチェック
@@ -128,6 +160,8 @@ class PopUp:
                     password_entry.get(),
                     start_time_entry.get(),
                     end_time_entry.get(),
+                    start_date_comb.get().zfill(2),
+                    end_date_comb.get().zfill(2),
                 )
                 is_start = True
                 root.destroy()

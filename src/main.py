@@ -32,7 +32,12 @@ def main():
     try:
         browser.pageMove(WORK_SCHEDULE_URL)
         sleep(5)
-        browser.work_entry(pop_up.start_time, pop_up.end_time)
+        browser.work_entry(
+            user_info.start_time,
+            user_info.end_time,
+            user_info.start_date,
+            user_info.end_date,
+        )
         pop_up.info_pop("処理完了")
     except Exception as e:
         print(e)

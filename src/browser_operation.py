@@ -34,7 +34,9 @@ class BrowserOperation:
         if self.HOME_URL != self.driver.current_url:
             raise Exception
 
-    def work_entry(self, start_time, end_time):
+    def work_entry(
+        self, start_time: str, end_time: str, start_date: str, end_date: str
+    ):
         date_manager = DateManager()
         date_manager.create_business_days()
 
@@ -45,22 +47,33 @@ class BrowserOperation:
         self.driver.switch_to.frame(iframe)
 
         for date in date_manager.business_days:
-            # 1日ずつ勤怠入力
-            self.driver.find_element(By.ID, "ttvTimeSt" + date).click()
-            sleep(0.3)
+            if date < "{}-{}-{}".format(
+                date_manager.year, date_manager.month, start_date
+            ):
+                # 開始日より前はスキップ
+                continue
+            elif date > "{}-{}-{}".format(
+                date_manager.year, date_manager.month, end_date
+            ):
+                # 終了日より後は処理しない
+                return
+            else:
+                # 1日ずつ勤怠入力
+                self.driver.find_element(By.ID, "ttvTimeSt" + date).click()
+                sleep(0.3)
 
-            # 開始/終了入力
-            self.driver.find_element(By.ID, "startTime").send_keys(start_time)
-            self.driver.find_element(By.ID, "endTime").send_keys(end_time)
+                # 開始/終了入力
+                self.driver.find_element(By.ID, "startTime").send_keys(start_time)
+                self.driver.find_element(By.ID, "endTime").send_keys(end_time)
 
-            self.driver.find_element(By.ID, "dlgInpTimeOk").click()
-            sleep(3)
+                self.driver.find_element(By.ID, "dlgInpTimeOk").click()
+                sleep(3)
 
-            # 工数入力
-            self.driver.find_element(By.ID, "dailyWorkCell" + date).click()
-            sleep(1)
-            self.driver.find_element(By.ID, "empWorkOk").click()
-            sleep(3)
+                # 工数入力
+                self.driver.find_element(By.ID, "dailyWorkCell" + date).click()
+                sleep(1)
+                self.driver.find_element(By.ID, "empWorkOk").click()
+                sleep(3)
 
     def session_clear(self):
         self.driver.quit()
