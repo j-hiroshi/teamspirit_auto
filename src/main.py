@@ -15,6 +15,9 @@ def main():
     user_info = UserInfo()
 
     isStart = pop_up.init_info_entry(user_info)
+    print("定時：{}~{}".format(pop_up._start_time, pop_up._end_time))
+    print(("入力日付：{}~{}".format(pop_up._start_date, pop_up._end_date)))
+
     if not isStart:
         return
 
