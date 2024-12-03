@@ -2,10 +2,10 @@ class UserInfo:
     def __init__(self):
         self.username = ""
         self.password = ""
-        self.start_time = "0900"
-        self.end_time = "1800"
-        self.start_date = "01"
-        self.end_date = "31"
+        self.start_time = ""
+        self.end_time = ""
+        self.start_date = ""
+        self.end_date = ""
 
     def set_info(
         self,

@@ -40,9 +40,10 @@ class BrowserOperation:
         date_manager = DateManager()
         date_manager.create_business_days()
 
-        shadow_root = self.driver.find_element(
-            By.TAG_NAME, "force-aloha-page"
-        ).shadow_root
+        element = self.driver.find_element(By.TAG_NAME, "force-aloha-page")
+        shadow_root = self.driver.execute_script(
+            "return arguments[0].shadowRoot", element
+        )
         iframe = shadow_root.find_element(By.CSS_SELECTOR, "iframe")
         self.driver.switch_to.frame(iframe)
 

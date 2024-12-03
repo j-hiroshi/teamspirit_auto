@@ -6,6 +6,8 @@ import datetime
 
 class PopUp:
     def __init__(self):
+        self.__username = ""
+        self.__password = ""
         self._start_time = "0900"  # 始業時間
         self._end_time = "1800"  # 終業時間
         self._start_date = "1"  # 開始日
@@ -105,6 +107,8 @@ class PopUp:
         end_date_comb.pack(padx=5, side=tk.LEFT)
 
         # 初期値設定
+        user_entry.insert(0, self.__username)
+        password_entry.insert(0, self.__password)
         start_time_entry.insert(0, self._start_time)
         end_time_entry.insert(0, self._end_time)
         start_date_comb.set(self._start_date)
